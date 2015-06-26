@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -18,12 +19,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * 仿优酷Android客户端图片左右滑动
- *
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
     private ViewPager viewPager; // android-support-v4中的滑动组件
     private List<ImageView> imageViews; // 滑动的图片集合
 
@@ -42,7 +43,7 @@ public class MainActivity extends Activity {
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             viewPager.setCurrentItem(currentItem);// 切换当前显示的图片
-        };
+        }
     };
 
     @Override
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        imageResId = new int[] { R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e };
+        imageResId = new int[]{R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e};
         titles = new String[imageResId.length];
         titles[0] = "巩俐不低俗，我就不能低俗";
         titles[1] = "扑树又回来啦！再唱经典老歌引万人大合唱";
@@ -63,8 +64,18 @@ public class MainActivity extends Activity {
         // 初始化图片资源
         for (int i = 0; i < imageResId.length; i++) {
             ImageView imageView = new ImageView(this);
+            imageView.setId(i);
             imageView.setImageResource(imageResId[i]);
             imageView.setScaleType(ScaleType.CENTER_CROP);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(MainActivity.this,"图片"+currentItem+"vid:"+v.getId(),Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(MainActivity.this,JumpPage.class);
+                    intent.getExtras().putString("info","我是第"+currentItem+"个页面跳转过来的");
+                    startActivity(intent);
+                }
+            });
             imageViews.add(imageView);
         }
 
@@ -83,8 +94,8 @@ public class MainActivity extends Activity {
         viewPager.setAdapter(new MyAdapter());// 设置填充ViewPager页面的适配器
         // 设置一个监听器，当ViewPager中的页面改变时调用
         viewPager.setOnPageChangeListener(new MyPageChangeListener());
-
     }
+
 
     @Override
     protected void onStart() {
@@ -101,11 +112,11 @@ public class MainActivity extends Activity {
         super.onStop();
     }
 
+
     /**
      * 换行切换任务
      *
      * @author Administrator
-     *
      */
     private class ScrollTask implements Runnable {
 
@@ -123,10 +134,14 @@ public class MainActivity extends Activity {
      * 当ViewPager中页面的状态发生改变时调用
      *
      * @author Administrator
-     *
      */
     private class MyPageChangeListener implements OnPageChangeListener {
         private int oldPosition = 0;
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
 
         /**
          * This method will be invoked when a new page becomes selected.
@@ -140,20 +155,17 @@ public class MainActivity extends Activity {
             oldPosition = position;
         }
 
-        public void onPageScrollStateChanged(int arg0) {
+        @Override
+        public void onPageScrollStateChanged(int state) {
 
         }
 
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
     }
 
     /**
      * 填充ViewPager页面的适配器
      *
      * @author Administrator
-     *
      */
     private class MyAdapter extends PagerAdapter {
 
@@ -188,14 +200,6 @@ public class MainActivity extends Activity {
             return null;
         }
 
-        @Override
-        public void startUpdate(View arg0) {
 
-        }
-
-        @Override
-        public void finishUpdate(View arg0) {
-
-        }
     }
 }
