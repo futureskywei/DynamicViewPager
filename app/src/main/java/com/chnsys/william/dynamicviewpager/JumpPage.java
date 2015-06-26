@@ -14,7 +14,7 @@ public class JumpPage extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView= (TextView) findViewById(R.id.firstInfo);
-        String info=  this.getIntent().getExtras().getString("info");
+        String info=  this.getIntent().getStringExtra("info");
         textView.setText(info);
     }
 }

@@ -72,7 +72,7 @@ public class MainActivity extends Activity{
                 public void onClick(View v) {
                     Toast.makeText(MainActivity.this,"图片"+currentItem+"vid:"+v.getId(),Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(MainActivity.this,JumpPage.class);
-                    intent.getExtras().putString("info","我是第"+currentItem+"个页面跳转过来的");
+                    intent.putExtra("info", "我是第" + currentItem + "个页面跳转过来的");
                     startActivity(intent);
                 }
             });
